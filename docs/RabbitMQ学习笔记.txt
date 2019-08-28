@@ -1,0 +1,96 @@
+Message Queue：MQ 消息队列
+    一种跨进程间的通信机制，用于上下游消息传递；系统之间的解耦，同时是数据可靠传输的重要保证。
+AMQP，即Advanced Message Queuing Protocol,高级消息队列协议,是应用层协议的一个开放标准,为面向消息的中间件设计。
+四种中间件：RabbitMQ（分布式、高可靠性系统）、ActiveMQ（传统应用）、Kafka（大数据、日志处理）、RocketMQ（互联网高并发）
+
+RabbitMQ的应用场景：
+1.异构系统的数据传递
+2.高并发程序的流量控制
+3.分布式系统的事务一致性TCC
+4.高可靠性交易系统
+
+基本概念：
+    Producer：生产者，消息的提供者；
+    Consumer：消费者，消息的使用者；
+    Message：消息，程序间通信的数据；
+    Queue：队列，消息存放的容器，消息先进先出；
+    Vhost：虚拟主机，相当于MQ的数据库，用于存储队列。
+
+消息状态:
+    Ready：消息已被送入队列，等待被消费；
+    Unacked：消息已被消费者认领，但还未被确认；消费者断开后消息回到ready状态。
+
+RabbitMQ六种工作模式：
+1.Hello World模式：一个生产者，一个消费者，入门学习模式。
+2.Work Queues工作队列模式：一个生产者，多个消费者，不同消费者收到消息不同。（消息通知服务）
+3.Publish/Subscribe发布订阅模式：exchange，按照一定规则将数据副本发送至不同消费者，所有消费者都收到相同数据。
+4.Routing路由模式：进行消息筛选，按照一定规则分发给不同消费者，不同消费者仅收到自己需要的消息，精准匹配。
+5.Topics主题模式：定义表达式规则，模糊匹配。
+6.RPC模式：方法的远程调用。
+
+关键方法：
+    声明队列：channel.queueDeclare(队列名，持久化，私有化，删除数据，额外参数)；
+    数据产生：channel.basicPublish(交换机，队列名，额外属性，字节流);
+    数据消费：channel.queueDeclare(队列名，自动确认，DefaultConsumer实现类);
+    确认签收：channel.basicAck(消息的TagId，确认签收所有消息);
+
+
+RabbitMQ与SpringBoot整合：
+引入依赖：
+<dependency>
+<groupId>org.springframework.boot</groupId>
+<artifactId>spring-boot-starter-amqp</artifactId>
+</dependency>
+producer生产者：
+    RabbitTemplate
+    ConfirmCallback
+    ReturnCallback
+    发送消息：rabbitTemplate.convertAndSend();
+consumer消费者：
+    @RabbitListener(
+        bindings = @QueueBinding(
+            value = @Queue(value="springboot-queue" , durable="true"),
+            exchange = @Exchange(value = "springboot-exchange" , durable = "true" , type = "topic") ,
+            key = "#"
+        )
+    )
+    @RabbitHandler
+    @Payload
+    @Headers
+
+
+RabbitMQ：内建集群
+    内建集群的设计用于完成两个目标：允许消费者和生产者在rabbitmq节点崩溃的情况下继续运行,以及通过添加更多的节点
+来线性扩展消息通信吞吐量。RabbitMQ通过Erlang提供的开放消息通信平台（OTP）分布式通信框架来实现这二个需求。
+
+RabbitMQ集群架构模式：
+1.主备模式：Warren
+适合在并发和数据量不高的情况下
+2.镜像模式：Mirror
+保证数据不丢失，只需要通过简单的配置
+3.远程模式：Shovel
+把消息进行不同数据中心的复制工作
+4.多活模式
+异地数据复制的主流模式
+
+HAProxy配置负载均衡：
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
