@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="common.shopInfo">
+
+    <!--<resultMap id="ResultSet" type="com.aura.model.ShopInfo">
+        &lt;!&ndash;id标签为主键标签，resultMap中必须存在一个id标签&ndash;&gt;
+        <id column="shop_id" jdbcType="INT" property="shopId" javaType="Integer" />
+        &lt;!&ndash;result标签为属性标签，
+        column属性指定表字段名，jdbcType为表字段数据类型
+        property为实体属性名，javaType为实体属性数据类型&ndash;&gt;
+        <result column="city_name" jdbcType="VARCHAR" property="cityName" javaType="String"/>
+        <result column="location_id" jdbcType="INT" property="locationId" javaType="Integer"/>
+        <result column="per_pay" jdbcType="INT" property="perPay" javaType="Integer"/>
+        <result column="score" jdbcType="INT" property="score" javaType="Integer"/>
+        <result column="comment_cnt" jdbcType="INT" property="commentCnt" javaType="Integer"/>
+        <result column="shop_level" jdbcType="INT" property="shopLevel" javaType="Integer"/>
+        <result column="cate_1_name" jdbcType="VARCHAR" property="cate1Name" javaType="String"/>
+        <result column="cate_2_name" jdbcType="VARCHAR" property="cate2Name" javaType="String"/>
+        <result column="cate_3_name" jdbcType="VARCHAR" property="cate3Name" javaType="String"/>
+    </resultMap>-->
+
+    <!-- Spark Streaming shop,city -->
+    <select id="getStreamShopCityList" resultType="ShopInfo">
+        SELECT * FROM shop_info
+    </select>
+
+    <select id="getShopInfoById" resultType="ShopInfo" parameterType="Integer">
+        SELECT DISTINCT * FROM shop_info where shop_id = #{shopId}
+    </select>
+
+    <select id="getTradeAcount" resultType="com.aura.model.TradeAcount">
+        SELECT * FROM trade_acount order by trade_count asc
+    </select>
+
+    <select id="getPopulShopList" resultType="com.aura.model.PopulShop" parameterType="String">
+        SELECT * FROM popul_shop WHERE cate = #{cate} order by grade asc
+    </select>
+
+    <select id="getMerchantTrade" resultType="com.aura.model.MerchantTrade">
+        SELECT * FROM (
+                          SELECT
+                              r.shop_id,SUM(r.trade_count) AS trade_count, MAX(update_time) AS update_time
+                          FROM
+                              (SELECT
+                                   *
+                               FROM
+                                   merchant_trade
+                               UNION
+                               SELECT * FROM merchant_trade_real
+                              ) r
+                          GROUP BY r.shop_id ORDER BY SUM(r.trade_count) DESC LIMIT 10) s ORDER BY s.update_time DESC
+    </select>
+
+    <select id="getCityTradeList" resultType="com.aura.model.CityTrade">
+        SELECT * FROM city_trade
+    </select>
+
+    <select id="getProvinceTrade" resultType="com.aura.model.ProvinceTrade">
+        SELECT
+            ss.province_name,SUM(trade_count) as trade_count FROM
+            (SELECT
+                 c.name AS province_name,
+                 SUM(a.trade_count) AS trade_count
+             FROM
+                 city_trade a
+                     JOIN t_city b
+                          ON a.city_name = b.name
+                     JOIN t_province c
+                          ON b.province_id = c.id
+             GROUP BY c.name
+             UNION
+             SELECT
+                 e.name AS province_name,
+                 SUM(d.trade_count) AS trade_count
+             FROM
+                 city_trade d
+                     JOIN t_province e
+                          ON d.city_name = e.name
+             GROUP BY e.name
+             UNION
+             SELECT
+                 cc.name AS province_name,
+                 SUM(aa.trade_count) AS trade_count
+             FROM
+                 city_trade_real aa
+                     JOIN t_city bb
+                          ON aa.city_name = bb.name
+                     JOIN t_province cc
+                          ON bb.province_id = cc.id
+             GROUP BY cc.name
+             UNION
+             SELECT
+                 ee.name AS province_name,
+                 SUM(dd.trade_count) AS trade_count
+             FROM
+                 city_trade_real dd
+                     JOIN t_province ee
+                          ON dd.city_name = ee.name
+             GROUP BY ee.name) ss GROUP BY ss.province_name;
+    </select>
+
+    <select id="getShopTradeView" resultType="com.aura.model.result.ShopTradeView">
+        select * from shop_trade_view;
+    </select>
+
+    <select id="getCityConsume" resultType="com.aura.model.result.CityConsume">
+        select * from city_consume order by consume desc limit 10;
+    </select>
+
+    <select id="getPopuShopTrade" resultType="com.aura.model.result.PopuShopTrade">
+        select * from popu_shop_trade;
+    </select>
+
+    <select id="getMostViewShop" resultType="com.aura.model.result.MostViewShop">
+        select * from most_view_shop;
+    </select>
+</mapper>
