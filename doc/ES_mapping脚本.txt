@@ -1,0 +1,278 @@
+curl -XPUT 'http://10.128.32.134:9200/hrmap-test' -d '
+{
+    "settings": {
+        "number_of_shards": 5,
+        "number_of_replicas": 1
+    }
+}
+'
+
+复制索引：
+curl -XPOST 'http://10.64.140.168:9200/_reindex' -d '
+{
+  "source": {
+    "index": "hrmapbak"
+  },
+  "dest": {
+    "index": "hrmap"
+  }
+}
+'
+
+curl -XPOST "http://10.128.32.134:9200/hrmap-test/hrmap-test/_mapping?pretty" -d ' 
+{
+    "hrmap-test": {
+        
+        "properties": {
+	    
+            "DREDATE": {
+                "type": "date",
+		"format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_second"
+            },
+            "DOMAINSITE": {
+                "type": "keyword"
+            },
+            "SPIDERTIME": {
+                "type": "date",
+		"format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_second"
+            },            
+            "C4": {
+                "type": "keyword"
+            },
+            "C5": {
+                "type": "keyword"
+            },
+            "C6": {
+                "type": "keyword"
+            },
+            "C7": {
+                "type": "keyword"
+            },
+            "C8": {
+                "type": "keyword"
+            },
+            "C9": {
+                "type": "keyword"
+            },
+            "URL": {
+                "type": "keyword"
+            },
+	    "BDMC": {
+                "type": "text",
+                "analyzer": "hanlp-index",
+                "search_analyzer": "hanlp-index",
+                "include_in_all": true
+            },
+	    "CJJ": {
+                "type": "text",
+                "index": false
+            },
+	    "QPJ": {
+                "type": "text",
+                "index": false
+            },
+	    "PGJ": {
+                "type": "text",
+                "index": false
+            },
+	    "DZ": {
+                "type": "text",
+                "index": false
+            },
+            "C1": {
+                "type": "keyword"
+            },
+            "C2": {
+                "type": "keyword"
+            },
+	    "C3": {
+                "type": "keyword"
+            },
+	    "JZMJ": {
+                "type": "text",
+                "index": false
+            },
+	    "SYTDMJ": {
+                "type": "text",
+                "index": false
+            },
+	    "MJ": {
+                "type": "text",
+                "index": false
+            },
+	    "YSFWYT": {
+                "type": "text",
+                "index": false
+            },
+	    "PMMS": {
+                "type": "text",
+                "index": false
+            },
+	    "PMCS": {
+                "type": "text",
+                "index": false
+            },
+	    "PMFS": {
+                "type": "text",
+                "index": false
+            },
+	    "LXR": {
+                "type": "text",
+                "index": false
+            },
+	    "LXDH": {
+                "type": "text",
+                "index": false
+            },
+	    "BMRS": {
+                "type": "text",
+                "index": false
+            },
+	    "SZTX": {
+                "type": "text",
+                "index": false
+            },
+	    "WGRS": {
+                "type": "text",
+                "index": false
+            },
+	    "JJFD": {
+                "type": "text",
+                "index": false
+            },
+	    "BZJ": {
+                "type": "text",
+                "index": false
+            },
+	    "BMZQ": {
+                "type": "text",
+                "index": false
+            },
+	    "YXGMQR": {
+                "type": "text",
+                "index": false
+            },
+	    "YSZQ": {
+                "type": "text",
+                "index": false
+            },
+	    "CZDW": {
+                "type": "text",
+                "index": false
+            },
+	    "QZQK": {
+                "type": "text",
+                "index": false
+            },
+	    "BDSUR": {
+                "type": "text",
+                "index": false
+            },
+	    "TDXZ": {
+                "type": "text",
+                "index": false
+            },
+	    "TDYT": {
+                "type": "text",
+                "index": false
+            },
+	    "QLXZQK": {
+                "type": "text",
+                "index": false
+            },
+	    "BDXZ": {
+                "type": "text",
+                "index": false
+            },
+	    "PMJSRQ": {
+                "type": "text",
+                "index": false
+            },
+	    "FWYT": {
+                "type": "text",
+                "index": false
+            },
+	    "QZH": {
+                "type": "text",
+                "index": false
+            },
+	    "ZDH": {
+                "type": "text",
+                "index": false
+            },
+            "LOCATION": {
+                "type": "geo_point"
+            },
+	    "LOCATIONMD5": {
+                "type": "keyword"
+            },
+	    "LOCATIONSTATUS": {
+                "type": "integer"
+            },
+	    "UNITPRICE": {
+                "type": "integer"
+            },
+	    "TOTALPRICE": {
+                "type": "integer"
+            },
+	    "CJJ_": {
+                "type": "integer"
+            },
+	    "QPJ_": {
+                "type": "integer"
+            },
+	    "PGJ_": {
+                "type": "integer"
+            },
+	    "JZMJ_": {
+                "type": "float"
+            },
+	    "SYTDMJ_": {
+                "type": "float"
+            },
+	    "MJ_": {
+                "type": "float"
+            },
+	    "PRICESTATUS": {
+                "type": "integer"
+            },
+	    "TDXZ_": {
+                "type": "keyword"
+            },
+	    "FWYT_": {
+                "type": "keyword"
+            },
+	    "PMRQ": {
+                "type": "integer"
+            },
+	    "COUNTRY": {
+                "type": "keyword"
+            },
+	    "PROVINCE": {
+                "type": "keyword"
+            },
+	    "CITY": {
+                "type": "keyword"
+            },
+	    "DISTRICT": {
+                "type": "keyword"
+            },
+	    "TOWN": {
+                "type": "keyword"
+            },
+	    "STREET": {
+                "type": "keyword"
+            },
+	    "PROVINCEMATCH": {
+                "type": "keyword"
+            },
+	    "CITYMATCH": {
+                "type": "keyword"
+            },
+	    "DISTRICTMATCH": {
+                "type": "keyword"
+            }
+        }
+    }
+}
+'

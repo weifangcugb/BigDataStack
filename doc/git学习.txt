@@ -1,0 +1,36 @@
+Git简介：
+Git是目前世界上最先进的分布式版本控制系统。
+工作区、暂存区、本地仓库、远程仓库
+
+本地仓库：
+1.$ git init	创建版本库，目录里的所有文件被Git管理起来 
+2.$ git add readme.txt	把文件添加到git仓库，工作区->暂存区
+3.$ git commit -m 'add a readme file'	将文件提交到git仓库,-m后跟提交说明，暂存区->本地仓库，修改只有添加到暂存区才能被提交到版本库
+4.$ git config --local user.name weifang	配置用户名
+  $ git config --local user.email weifang@chamc.com.cn	配置邮箱
+5.$ git diff readme.txt		查看修改内容difference
+6.$ git log		显示从由近到远的历史记录
+git log --oneline --graph
+7.$ git reset --hard HEAD^		回退到上一个版本，也可以直接输入版本号
+8.$ git reflog		记录每一次操作，以及版本号
+9.$ git checkout -- readme.txt		撤销工作区的修改，暂存区的无法撤销
+10$ git rm test.txt		删除版本库中的文件，之后也需要commit操作
+
+远程仓库：
+$ ssh-keygen -t rsa -C "weifang@chamc.com.cn"		在用户主目录下生成密钥，在github上添加ssh pulic key
+1.$ git remote add origin git@github.com:weifangcugb/learngit.git		将本地库推到远程库，默认远程库名为origin
+2.$ git push -u origin master		将当前分支master推送到远程
+3.$ git clone git@github.com:weifangcugb/learngit.git		从远程库克隆
+
+分支管理：
+1.$ git checkout -b dev		创建并切换到dev分支
+相当于执行如下命令：
+$ git branch dev	创建分支
+$ git checkout dev		切换分支
+2.$ git branch		列出所有分支，当前分支前会有一个*
+* dev
+  master
+3.$ git merge dev		合并dev分支到当前分支
+4.$ git branch -d dev		删除分支
+5.$ git merge --no-ff -m "merge with no-ff" dev		使用普通模式合并分支，可以查看合并历史
+6.$ git log --graph --pretty=oneline --abbrev-commit		查看分支的合并情况
