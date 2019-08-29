@@ -8,4 +8,4 @@ Spark：Spark Core、Spark SQL、Spark Streaming、Spark Mllib
 Flink：DataStreamAPI、DatasetAPI、Table API&SQL  
 
 大数据学习思维导图：
-![Image text](https://github.com/weifangcugb/BigDataStack/blob/master/docs/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%9E%B6%E6%9E%84.png)
+![Image text](https://github.com/weifangcugb/BigDataStack/blob/master/docs/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE.png)
